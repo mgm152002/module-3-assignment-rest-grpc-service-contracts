@@ -1,0 +1,14 @@
+[2026-10-07 18:33:38.552972] Order Service (REST) starting on port 5000, inventory timeout=2s
+ * Serving Flask app 'order_service'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+[2026-10-07 18:33:43.420449] POST /order item=widget qty=2 -> 201 (confirmed)
+127.0.0.1 - - [07/Oct/2026 18:33:43] "[35m[1mPOST /order HTTP/1.1[0m" 201 -
+[2026-10-07 18:33:54.835556] POST /order item=widget qty=2 -> 504 (inventory service timeout after 2s)
+127.0.0.1 - - [07/Oct/2026 18:33:54] "[35m[1mPOST /order HTTP/1.1[0m" 504 -
+[2026-10-07 18:34:00.697656] POST /order item=widget qty=2 -> 201 (confirmed)
+127.0.0.1 - - [07/Oct/2026 18:34:00] "[35m[1mPOST /order HTTP/1.1[0m" 201 -
+[2026-10-07 18:34:02.591174] POST /order item=sprocket qty=1 -> 409 (insufficient stock)
+127.0.0.1 - - [07/Oct/2026 18:34:02] "[31m[1mPOST /order HTTP/1.1[0m" 409 -

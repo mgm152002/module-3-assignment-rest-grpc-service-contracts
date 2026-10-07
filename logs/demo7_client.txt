@@ -1,0 +1,4 @@
+$ GRPC_TARGET=unix:...sock python3 grpc/order_client.py gadget 1   # same server survived the deadline
+Target: unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock
+Request: item_id='gadget' quantity=1 (deadline=2.0s)
+OK: available=True stock=25 message='1 x gadget available (stock=25)'

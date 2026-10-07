@@ -1,0 +1,4 @@
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'   # order service (PID 1754) survived the timeout
+{"item_id":"widget","quantity":2,"status":"confirmed"}
+
+HTTP 201

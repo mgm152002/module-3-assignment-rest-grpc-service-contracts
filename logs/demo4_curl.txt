@@ -1,0 +1,4 @@
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"sprocket","quantity":1}'   # sprocket has 0 in stock
+{"reason":"insufficient stock","status":"rejected"}
+
+HTTP 409

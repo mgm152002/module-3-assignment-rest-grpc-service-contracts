@@ -1,0 +1,24 @@
+[2026-10-07 18:33:38.445672] Inventory Service (REST) starting on port 5001, INVENTORY_DELAY=0
+ * Serving Flask app 'inventory_service'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+[33mPress CTRL+C to quit[0m
+[2026-10-07 18:33:43.419066] GET /inventory/widget?quantity=2 -> 200 (available=True, stock=100)
+127.0.0.1 - - [07/Oct/2026 18:33:43] "GET /inventory/widget?quantity=2 HTTP/1.1" 200 -
+[2026-10-07 18:33:49.023770] Inventory Service (REST) starting on port 5001, INVENTORY_DELAY=5
+ * Serving Flask app 'inventory_service'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+[33mPress CTRL+C to quit[0m
+[2026-10-07 18:33:58.870252] Inventory Service (REST) starting on port 5001, INVENTORY_DELAY=0
+ * Serving Flask app 'inventory_service'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+[33mPress CTRL+C to quit[0m
+[2026-10-07 18:34:00.696268] GET /inventory/widget?quantity=2 -> 200 (available=True, stock=100)
+127.0.0.1 - - [07/Oct/2026 18:34:00] "GET /inventory/widget?quantity=2 HTTP/1.1" 200 -
+[2026-10-07 18:34:02.588460] GET /inventory/sprocket?quantity=1 -> 200 (available=False, stock=0)
+127.0.0.1 - - [07/Oct/2026 18:34:02] "GET /inventory/sprocket?quantity=1 HTTP/1.1" 200 -

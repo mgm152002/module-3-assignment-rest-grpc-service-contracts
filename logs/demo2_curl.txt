@@ -1,0 +1,5 @@
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'   # inventory delayed 5s, timeout is 2s
+{"error":"inventory service timeout"}
+
+HTTP 504
+elapsed: ~2.03s (measured; matches the 2s client timeout)

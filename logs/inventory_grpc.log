@@ -1,0 +1,7 @@
+[2026-10-07 18:34:07.230083] Inventory Service (gRPC) listening on 50051, INVENTORY_DELAY=0
+[2026-10-07 18:35:56.169065] Inventory Service (gRPC) listening on 127.0.0.1:50051 and unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock, INVENTORY_DELAY=0
+[2026-10-07 18:36:00.703547] CheckInventory(item=widget, qty=2) -> OK (2 x widget available (stock=100))
+[2026-10-07 18:36:05.675322] Inventory Service (gRPC) listening on 127.0.0.1:50051 and unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock, INVENTORY_DELAY=5
+[2026-10-07 18:36:16.961728] Inventory Service (gRPC) listening on 127.0.0.1:50051 and unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock, INVENTORY_DELAY=0
+[2026-10-07 18:36:18.958621] CheckInventory(item=gadget, qty=1) -> OK (1 x gadget available (stock=25))
+[2026-10-07 18:36:21.668804] CheckInventory(item=sprocket, qty=1) -> FAILED_PRECONDITION (stock=0)
