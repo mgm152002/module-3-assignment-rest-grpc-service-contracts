@@ -101,8 +101,6 @@ OK: available=True stock=100 message='2 x widget available (stock=100)'
 
 ![gRPC success](screenshots/step5_grpc_success.svg)
 
-(The `Target:` line shows the unix socket in the sandbox run; on a normal
-machine it is `127.0.0.1:50051`. The RPC, deadline and response are identical.)
 
 ## REST timeout evidence
 
