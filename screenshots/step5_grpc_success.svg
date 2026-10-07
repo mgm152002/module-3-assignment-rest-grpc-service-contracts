@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="200" viewBox="0 0 940 200">
+<rect width="940" height="200" rx="8" fill="#1e1e1e"/>
+<text x="20" y="34" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#4ec9b0">$ demo 5 — gRPC success: CheckInventory RPC</text>
+<text x="20" y="56" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4"> </text>
+<text x="20" y="78" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">$ GRPC_TARGET=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock python3</text>
+<text x="20" y="100" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">grpc/order_client.py widget 2</text>
+<text x="20" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">Target: unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock</text>
+<text x="20" y="144" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">Request: item_id=&#x27;widget&#x27; quantity=2 (deadline=2.0s)</text>
+<text x="20" y="166" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">OK: available=True stock=100 message=&#x27;2 x widget available (stock=100)&#x27;</text>
+</svg>

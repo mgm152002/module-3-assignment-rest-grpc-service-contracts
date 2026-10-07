@@ -85,7 +85,7 @@ $ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"it
 HTTP 201
 ```
 
-![REST success](screenshots/step1_rest_success.png)
+![REST success](screenshots/step1_rest_success.svg)
 
 The order service called `GET /inventory/widget?quantity=2`, got
 `{"available": true, "stock": 100, ...}` and returned 201 confirmed.
@@ -99,7 +99,7 @@ Request: item_id='widget' quantity=2 (deadline=2.0s)
 OK: available=True stock=100 message='2 x widget available (stock=100)'
 ```
 
-![gRPC success](screenshots/step5_grpc_success.png)
+![gRPC success](screenshots/step5_grpc_success.svg)
 
 (The `Target:` line shows the unix socket in the sandbox run; on a normal
 machine it is `127.0.0.1:50051`. The RPC, deadline and response are identical.)
@@ -123,7 +123,7 @@ Order service log — the timeout was caught and mapped to 504, not a crash:
 [2026-10-07 18:33:54.835556] POST /order item=widget qty=2 -> 504 (inventory service timeout after 2s)
 ```
 
-![REST timeout](screenshots/step2_rest_timeout.png)
+![REST timeout](screenshots/step2_rest_timeout.svg)
 
 ## gRPC deadline evidence
 
@@ -139,7 +139,7 @@ client exit code: 0
 
 The `DEADLINE_EXCEEDED` status was handled cleanly and the client exited 0.
 
-![gRPC deadline](screenshots/step6_grpc_deadline.png)
+![gRPC deadline](screenshots/step6_grpc_deadline.svg)
 
 ## Evidence the Order Service stayed running after the failures
 
@@ -154,7 +154,7 @@ $ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"it
 HTTP 201
 ```
 
-![REST still running](screenshots/step3_rest_still_running.png)
+![REST still running](screenshots/step3_rest_still_running.svg)
 
 gRPC: after the deadline failure, the inventory server was restarted with no
 delay and the next check succeeded:
@@ -165,14 +165,14 @@ Request: item_id='gadget' quantity=1 (deadline=2.0s)
 OK: available=True stock=25 message='1 x gadget available (stock=25)'
 ```
 
-![gRPC still running](screenshots/step7_grpc_still_running.png)
+![gRPC still running](screenshots/step7_grpc_still_running.svg)
 
 Out-of-stock handling (extra evidence): `sprocket` has 0 in stock.
 REST returned `409 {"status":"rejected","reason":"insufficient stock"}`;
 gRPC returned `FAILED_PRECONDITION: insufficient stock`.
 
-![REST unavailable](screenshots/step4_rest_unavailable.png)
-![gRPC unavailable](screenshots/step8_grpc_unavailable.png)
+![REST unavailable](screenshots/step4_rest_unavailable.svg)
+![gRPC unavailable](screenshots/step8_grpc_unavailable.svg)
 
 ## REST vs gRPC comparison
 
@@ -193,7 +193,7 @@ cost of the contract living only in prose and example payloads.
 
 ## Repo layout
 
-![Repo structure](screenshots/step0_structure.png)
+![Repo structure](screenshots/step0_structure.svg)
 
 ```
 rest/inventory_service.py    Flask inventory service (:5001)

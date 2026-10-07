@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="354" viewBox="0 0 940 354">
+<rect width="940" height="354" rx="8" fill="#1e1e1e"/>
+<text x="20" y="34" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#4ec9b0">$ demo 0 — repo layout (Python implementation)</text>
+<text x="20" y="56" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4"> </text>
+<text x="20" y="78" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">$ find . -path ./.git -prune -o -type f -print | grep -v screenshots | sort</text>
+<text x="20" y="100" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./README.md</text>
+<text x="20" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./requirements.txt</text>
+<text x="20" y="144" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./rest/inventory_service.py      # Flask inventory service (:5001)</text>
+<text x="20" y="166" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./rest/order_service.py          # Flask order service (:5000, 2s timeout)</text>
+<text x="20" y="188" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory.proto           # service contract</text>
+<text x="20" y="210" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_pb2.py          # generated stubs (protoc)</text>
+<text x="20" y="232" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_pb2_grpc.py</text>
+<text x="20" y="254" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_server.py       # gRPC inventory server (:50051)</text>
+<text x="20" y="276" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order_client.py           # gRPC order client (2.0s deadline)</text>
+<text x="20" y="298" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./logs/                          # server logs + demo transcripts</text>
+<text x="20" y="320" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./screenshots/                   # terminal screenshots of each step</text>
+</svg>

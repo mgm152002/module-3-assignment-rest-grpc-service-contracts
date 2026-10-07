@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="200" viewBox="0 0 940 200">
+<rect width="940" height="200" rx="8" fill="#1e1e1e"/>
+<text x="20" y="34" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#4ec9b0">$ demo 1 — REST success: order confirmed (HTTP 201)</text>
+<text x="20" y="56" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4"> </text>
+<text x="20" y="78" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">$ curl -X POST localhost:5000/order -H &quot;Content-Type: application/json&quot; -d</text>
+<text x="20" y="100" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">&#x27;{&quot;item_id&quot;:&quot;widget&quot;,&quot;quantity&quot;:2}&#x27;</text>
+<text x="20" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">{&quot;item_id&quot;:&quot;widget&quot;,&quot;quantity&quot;:2,&quot;status&quot;:&quot;confirmed&quot;}</text>
+<text x="20" y="144" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4"> </text>
+<text x="20" y="166" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">HTTP 201</text>
+</svg>
