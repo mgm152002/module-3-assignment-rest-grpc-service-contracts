@@ -1,4 +1,4 @@
-# CMPE 273 — Module 3 Assignment: REST & gRPC Service Contracts
+# CMPE 273 — Week 1 Lab 1: Order/Inventory via REST and gRPC
 
 Manoj Ganjigatte Manjunatha — SJSU ID 020763197
 
@@ -101,6 +101,8 @@ OK: available=True stock=100 message='2 x widget available (stock=100)'
 
 ![gRPC success](screenshots/step5_grpc_success.svg)
 
+(The `Target:` line shows the unix socket in the sandbox run; on a normal
+machine it is `127.0.0.1:50051`. The RPC, deadline and response are identical.)
 
 ## REST timeout evidence
 
@@ -141,9 +143,18 @@ The `DEADLINE_EXCEEDED` status was handled cleanly and the client exited 0.
 
 ## Evidence the Order Service stayed running after the failures
 
-REST: after the 504 timeout, the inventory service was restarted with no delay
-and the *same* order service process (PID 1754, started before the failure)
-served the next order:
+Key point: the ORDER service is started once and never restarted. Only the
+INVENTORY service is restarted, purely to switch the artificial 5s delay
+on and off.
+
+REST timeline:
+1. Started the inventory service (no delay) and the order service (PID 1754).
+2. Demo 1 → HTTP 201, order confirmed.
+3. Restarted ONLY the inventory service, with INVENTORY_DELAY=5.
+4. Demo 2 → HTTP 504 after ~2.03s. The order service caught the timeout,
+   logged it, and kept running — PID 1754 was never touched.
+5. Restarted ONLY the inventory service, with no delay.
+6. Demo 3 → HTTP 201, served by the same order service process from step 1:
 
 ```
 $ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
@@ -154,8 +165,15 @@ HTTP 201
 
 ![REST still running](screenshots/step3_rest_still_running.svg)
 
-gRPC: after the deadline failure, the inventory server was restarted with no
-delay and the next check succeeded:
+gRPC timeline (the order side here is a short-lived client script, so "stays
+running" means it handles the failure cleanly instead of crashing):
+1. Started the inventory server (no delay).
+2. Demo 5 → CheckInventory OK.
+3. Restarted ONLY the inventory server, with INVENTORY_DELAY=5.
+4. Demo 6 → DEADLINE_EXCEEDED handled cleanly, client exited 0
+   (no traceback, no hang).
+5. Restarted ONLY the inventory server, with no delay.
+6. Demo 7 → the next check succeeded:
 
 ```
 $ python3 grpc/order_client.py gadget 1
@@ -164,6 +182,9 @@ OK: available=True stock=25 message='1 x gadget available (stock=25)'
 ```
 
 ![gRPC still running](screenshots/step7_grpc_still_running.svg)
+
+In both versions the slow-responding side (inventory) was the only thing
+restarted; the order side survived each failure without any restart.
 
 Out-of-stock handling (extra evidence): `sprocket` has 0 in stock.
 REST returned `409 {"status":"rejected","reason":"insufficient stock"}`;
