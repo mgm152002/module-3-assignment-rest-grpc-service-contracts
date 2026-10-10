@@ -90,18 +90,19 @@ def serve():
     order_pb2_grpc.add_OrderServiceServicer_to_server(
         OrderServicer(inventory_target), server)
     # Primary TCP listener.
-    server.add_insecure_port("127.0.0.1:50052")
+    bind = os.environ.get("ORDER_BIND", "127.0.0.1:50052")
+    server.add_insecure_port(bind)
     # Unix-domain socket listener: used when the sandbox network filter blocks
     # TCP (it intercepts AF_INET6 connections). Same service, same semantics.
     here = os.path.dirname(os.path.abspath(__file__))
-    sock_path = os.path.join(here, "order.sock")
+    sock_path = os.environ.get("ORDER_SOCKET", os.path.join(here, "order.sock"))
     try:
         os.unlink(sock_path)
     except FileNotFoundError:
         pass
     server.add_insecure_port("unix:" + sock_path)
     server.start()
-    print(f"[{datetime.now()}] Order Service (gRPC) listening on 127.0.0.1:50052 "
+    print(f"[{datetime.now()}] Order Service (gRPC) listening on {bind} "
           f"and unix:{sock_path}, inventory={inventory_target}, "
           f"deadline={DEADLINE_SECS}s", flush=True)
     server.wait_for_termination()

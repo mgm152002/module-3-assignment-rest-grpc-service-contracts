@@ -1,7 +1,8 @@
 """Place an order through the persistent gRPC Order Service.
 
 Usage: python3 grpc/place_order.py <item_id> <quantity>
-Calls OrderService.PlaceOrder with a 2.0s deadline and prints the outcome.
+Calls OrderService.PlaceOrder with a 5.0s deadline and prints the outcome.
+The Order Service applies its own 2.0s downstream Inventory deadline.
 Handles DEADLINE_EXCEEDED, NOT_FOUND, FAILED_PRECONDITION and
 INVALID_ARGUMENT cleanly. Exit code is 0 for every handled case.
 
@@ -19,7 +20,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 import order_pb2
 import order_pb2_grpc
 
-DEADLINE_SECS = 2.0
+DEADLINE_SECS = 5.0
 DEFAULT_TARGET = "127.0.0.1:50052"
 
 

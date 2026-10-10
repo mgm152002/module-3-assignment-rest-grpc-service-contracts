@@ -70,6 +70,10 @@ Terminal 3 — Place orders through it:
 python3 grpc/place_order.py widget 2
 ```
 
+The caller uses a 5s deadline, while the persistent Order Service applies
+the 2s Inventory deadline. This lets the Order Service report the downstream
+failure before the caller times out.
+
 The one-shot `order_client.py` still works for direct inventory checks:
 
 ```
@@ -216,6 +220,23 @@ OK: status='confirmed' item_id='widget' quantity=2
 ```
 
 ![gRPC order service still running](screenshots/step9_grpc_order_still_running.svg)
+
+Observed lifecycle verification (real RPCs and a separate Order process):
+
+```
+PlaceOrder(item=widget, qty=2) -> DEADLINE_EXCEEDED (inventory too slow)
+Verified DEADLINE_EXCEEDED; Order PID 50742 remains running
+PlaceOrder(item=widget, qty=2) -> OK (confirmed)
+Verified recovery success in the same Order PID 50742
+PlaceOrder(item=sprocket, qty=1) -> FAILED_PRECONDITION
+```
+
+Inventory used a 5s temporary delay and then returned to normal speed.
+The same Order process remained running and returned a confirmed order.
+To reproduce manually, keep `grpc/order_server.py` running, restart Inventory
+with `INVENTORY_DELAY=5`, and run `python3 grpc/place_order.py widget 2`.
+Restart only Inventory without the delay and repeat the order. The Order
+Service should return a confirmed order without restarting.
 
 Out-of-stock handling (extra evidence): `sprocket` has 0 in stock.
 REST returned `409 {"status":"rejected","reason":"insufficient stock"}`;
