@@ -1,4 +1,4 @@
-# CMPE 273 — Week 1 Lab 1: Order/Inventory via REST and gRPC
+# CMPE 273 — Order/Inventory via REST and gRPC
 
 Manoj Ganjigatte Manjunatha — SJSU ID 020763197
 
