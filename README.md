@@ -91,7 +91,7 @@ outside the sandbox). On a regular machine just run the client as shown above.
 ## Successful REST request/response
 
 ```
-manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+~/manoj$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
 {"item_id":"widget","quantity":2,"status":"confirmed"}
 
 HTTP 201
@@ -108,7 +108,7 @@ Bad input is rejected before touching inventory — a missing, non-integer,
 zero, or negative quantity returns `400`, not `409`:
 
 ```
-manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":-2}'
+~/manoj$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":-2}'
 {"error":"request must be JSON with item_id (str) and quantity (positive int)"}
 
 HTTP 400
@@ -117,14 +117,14 @@ HTTP 400
 The gRPC order service validates the same way, with `INVALID_ARGUMENT`:
 
 ```
-manoj@mac ~/manoj % python3 grpc/place_order.py widget -3
+~/manoj$ python3 grpc/place_order.py widget -3
 INVALID_ARGUMENT: quantity must be a positive integer
 ```
 
 ## Successful gRPC request/response
 
 ```
-manoj@mac ~/manoj % GRPC_TARGET=unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/inventory.sock python3 grpc/order_client.py widget 2
+~/manoj$ GRPC_TARGET=unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/inventory.sock python3 grpc/order_client.py widget 2
 Target: unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/inventory.sock
 Request: item_id='widget' quantity=2 (deadline=2.0s)
 OK: available=True stock=100 message='2 x widget available (stock=100)'
@@ -141,7 +141,7 @@ Inventory restarted with `INVENTORY_DELAY=5` (longer than the order service's
 2s `requests.get(timeout=2)`):
 
 ```
-manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+~/manoj$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
 {"error":"inventory service timeout"}
 
 HTTP 504
@@ -162,7 +162,7 @@ Inventory server restarted with `INVENTORY_DELAY=5` (longer than the client's
 2.0s deadline):
 
 ```
-manoj@mac ~/manoj % python3 grpc/order_client.py widget 2
+~/manoj$ python3 grpc/order_client.py widget 2
 Request: item_id='widget' quantity=2 (deadline=2.0s)
 DEADLINE_EXCEEDED: inventory service did not respond within 2.0s (details: Deadline Exceeded)
 client exit code: 0
@@ -179,7 +179,7 @@ and the *same* order service process (PID 1754, started before the failure)
 served the next order:
 
 ```
-manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+~/manoj$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
 {"item_id":"widget","quantity":2,"status":"confirmed"}
 
 HTTP 201
@@ -191,7 +191,7 @@ gRPC: after the deadline failure, the inventory server was restarted with no
 delay and the next check succeeded:
 
 ```
-manoj@mac ~/manoj % python3 grpc/order_client.py gadget 1
+~/manoj$ python3 grpc/order_client.py gadget 1
 Request: item_id='gadget' quantity=1 (deadline=2.0s)
 OK: available=True stock=25 message='1 x gadget available (stock=25)'
 ```
@@ -204,12 +204,12 @@ order-service process served a confirmed order after the inventory was
 restarted with no delay:
 
 ```
-manoj@mac ~/manoj % ORDER_TARGET=unix:.../order.sock python3 grpc/place_order.py widget 2
+~/manoj$ ORDER_TARGET=unix:.../order.sock python3 grpc/place_order.py widget 2
 Target: unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/order.sock
 Request: item_id='widget' quantity=2 (deadline=2.0s)
 DEADLINE_EXCEEDED: order service did not respond within 2.0s (details: Deadline Exceeded)
 
-manoj@mac ~/manoj % ORDER_TARGET=unix:.../order.sock python3 grpc/place_order.py widget 2
+~/manoj$ ORDER_TARGET=unix:.../order.sock python3 grpc/place_order.py widget 2
 Target: unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/order.sock
 Request: item_id='widget' quantity=2 (deadline=2.0s)
 OK: status='confirmed' item_id='widget' quantity=2
