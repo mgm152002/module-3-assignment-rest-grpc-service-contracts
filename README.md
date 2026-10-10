@@ -49,7 +49,7 @@ Install dependencies (same requirements file), then generate the stubs
 
 ```
 pip install -r requirements.txt
-python3 -m grpc_tools.protoc -Igrpc --python_out=grpc --grpc_python_out=grpc grpc/inventory.proto
+python3 -m grpc_tools.protoc -Igrpc --python_out=grpc --grpc_python_out=grpc grpc/inventory.proto grpc/order.proto
 ```
 
 Terminal 1 — Inventory server (port 50051):
@@ -58,7 +58,19 @@ Terminal 1 — Inventory server (port 50051):
 python3 grpc/inventory_server.py
 ```
 
-Terminal 2 — Order client (2.0s deadline per call):
+Terminal 2 — Persistent order service (port 50052, 2.0s inventory deadline):
+
+```
+python3 grpc/order_server.py
+```
+
+Terminal 3 — Place orders through it:
+
+```
+python3 grpc/place_order.py widget 2
+```
+
+The one-shot `order_client.py` still works for direct inventory checks:
 
 ```
 python3 grpc/order_client.py widget 2
@@ -79,7 +91,7 @@ outside the sandbox). On a regular machine just run the client as shown above.
 ## Successful REST request/response
 
 ```
-$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
 {"item_id":"widget","quantity":2,"status":"confirmed"}
 
 HTTP 201
@@ -90,11 +102,30 @@ HTTP 201
 The order service called `GET /inventory/widget?quantity=2`, got
 `{"available": true, "stock": 100, ...}` and returned 201 confirmed.
 
+## Request validation
+
+Bad input is rejected before touching inventory — a missing, non-integer,
+zero, or negative quantity returns `400`, not `409`:
+
+```
+manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":-2}'
+{"error":"request must be JSON with item_id (str) and quantity (positive int)"}
+
+HTTP 400
+```
+
+The gRPC order service validates the same way, with `INVALID_ARGUMENT`:
+
+```
+manoj@mac ~/manoj % python3 grpc/place_order.py widget -3
+INVALID_ARGUMENT: quantity must be a positive integer
+```
+
 ## Successful gRPC request/response
 
 ```
-$ GRPC_TARGET=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock python3 grpc/order_client.py widget 2
-Target: unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock
+manoj@mac ~/manoj % GRPC_TARGET=unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/inventory.sock python3 grpc/order_client.py widget 2
+Target: unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/inventory.sock
 Request: item_id='widget' quantity=2 (deadline=2.0s)
 OK: available=True stock=100 message='2 x widget available (stock=100)'
 ```
@@ -110,7 +141,7 @@ Inventory restarted with `INVENTORY_DELAY=5` (longer than the order service's
 2s `requests.get(timeout=2)`):
 
 ```
-$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
 {"error":"inventory service timeout"}
 
 HTTP 504
@@ -131,7 +162,7 @@ Inventory server restarted with `INVENTORY_DELAY=5` (longer than the client's
 2.0s deadline):
 
 ```
-$ python3 grpc/order_client.py widget 2
+manoj@mac ~/manoj % python3 grpc/order_client.py widget 2
 Request: item_id='widget' quantity=2 (deadline=2.0s)
 DEADLINE_EXCEEDED: inventory service did not respond within 2.0s (details: Deadline Exceeded)
 client exit code: 0
@@ -148,7 +179,7 @@ and the *same* order service process (PID 1754, started before the failure)
 served the next order:
 
 ```
-$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+manoj@mac ~/manoj % curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
 {"item_id":"widget","quantity":2,"status":"confirmed"}
 
 HTTP 201
@@ -160,12 +191,31 @@ gRPC: after the deadline failure, the inventory server was restarted with no
 delay and the next check succeeded:
 
 ```
-$ python3 grpc/order_client.py gadget 1
+manoj@mac ~/manoj % python3 grpc/order_client.py gadget 1
 Request: item_id='gadget' quantity=1 (deadline=2.0s)
 OK: available=True stock=25 message='1 x gadget available (stock=25)'
 ```
 
 ![gRPC still running](screenshots/step7_grpc_still_running.svg)
+
+The gRPC *order service itself* is persistent too. With the inventory slowed
+to 5s, `PlaceOrder` returned `DEADLINE_EXCEEDED`, and the *same*
+order-service process served a confirmed order after the inventory was
+restarted with no delay:
+
+```
+manoj@mac ~/manoj % ORDER_TARGET=unix:.../order.sock python3 grpc/place_order.py widget 2
+Target: unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/order.sock
+Request: item_id='widget' quantity=2 (deadline=2.0s)
+DEADLINE_EXCEEDED: order service did not respond within 2.0s (details: Deadline Exceeded)
+
+manoj@mac ~/manoj % ORDER_TARGET=unix:.../order.sock python3 grpc/place_order.py widget 2
+Target: unix:/home/manoj/manoj/module-3-assignment-rest-grpc-service-contracts/grpc/order.sock
+Request: item_id='widget' quantity=2 (deadline=2.0s)
+OK: status='confirmed' item_id='widget' quantity=2
+```
+
+![gRPC order service still running](screenshots/step9_grpc_order_still_running.svg)
 
 Out-of-stock handling (extra evidence): `sprocket` has 0 in stock.
 REST returned `409 {"status":"rejected","reason":"insufficient stock"}`;
@@ -198,10 +248,13 @@ cost of the contract living only in prose and example payloads.
 ```
 rest/inventory_service.py    Flask inventory service (:5001)
 rest/order_service.py        Flask order service (:5000, 2s inventory timeout)
-grpc/inventory.proto         service contract
-grpc/inventory_pb2*.py       generated stubs (protoc)
+grpc/inventory.proto         inventory service contract
+grpc/order.proto             order service contract
+grpc/*_pb2*.py               generated stubs (protoc)
 grpc/inventory_server.py     gRPC inventory server (:50051)
-grpc/order_client.py         gRPC order client (2.0s deadline)
+grpc/order_server.py         persistent gRPC order service (:50052, 2.0s deadline)
+grpc/order_client.py         one-shot direct inventory client (2.0s deadline)
+grpc/place_order.py          order client via the order service
 screenshots/                 terminal screenshots of each demo step
 logs/                        server logs and captured demo transcripts
 ```

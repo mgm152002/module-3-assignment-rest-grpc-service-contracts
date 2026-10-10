@@ -1,17 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="940" height="354" viewBox="0 0 940 354">
-<rect width="940" height="354" rx="8" fill="#1e1e1e"/>
-<text x="20" y="34" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#4ec9b0">$ demo 0 — repo layout (Python implementation)</text>
-<text x="20" y="56" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4"> </text>
-<text x="20" y="78" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">$ find . -path ./.git -prune -o -type f -print | grep -v screenshots | sort</text>
-<text x="20" y="100" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./README.md</text>
-<text x="20" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./requirements.txt</text>
-<text x="20" y="144" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./rest/inventory_service.py      # Flask inventory service (:5001)</text>
-<text x="20" y="166" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./rest/order_service.py          # Flask order service (:5000, 2s timeout)</text>
-<text x="20" y="188" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory.proto           # service contract</text>
-<text x="20" y="210" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_pb2.py          # generated stubs (protoc)</text>
-<text x="20" y="232" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_pb2_grpc.py</text>
-<text x="20" y="254" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_server.py       # gRPC inventory server (:50051)</text>
-<text x="20" y="276" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order_client.py           # gRPC order client (2.0s deadline)</text>
-<text x="20" y="298" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./logs/                          # server logs + demo transcripts</text>
-<text x="20" y="320" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./screenshots/                   # terminal screenshots of each step</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="498" viewBox="0 0 940 498">
+<rect width="940" height="498" rx="8" fill="#1e1e1e"/>
+<rect x="0" y="0" width="940" height="34" rx="8" fill="#3a3a3c"/>
+<rect x="0" y="20" width="940" height="14" fill="#3a3a3c"/>
+<circle cx="20" cy="17" r="6" fill="#ff5f57" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
+<circle cx="40" cy="17" r="6" fill="#febc2e" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
+<circle cx="60" cy="17" r="6" fill="#28c840" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
+<text x="470" y="22" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" fill="#d7d7d7">manoj — zsh</text>
+<text x="20" y="68" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#4ec9b0">manoj@mac ~/manoj % demo 0 — repo layout (Python implementation)</text>
+<text x="20" y="90" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4"> </text>
+<text x="20" y="112" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">manoj@mac ~/manoj % find . -path ./.git -prune -o -type f -print | grep -v screenshots | sort</text>
+<text x="20" y="134" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./README.md</text>
+<text x="20" y="156" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./requirements.txt</text>
+<text x="20" y="178" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./rest/inventory_service.py      # Flask inventory service (:5001)</text>
+<text x="20" y="200" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./rest/order_service.py          # Flask order service (:5000, 2s timeout)</text>
+<text x="20" y="222" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory.proto           # inventory service contract</text>
+<text x="20" y="244" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order.proto               # order service contract</text>
+<text x="20" y="266" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_pb2.py          # generated stubs (protoc)</text>
+<text x="20" y="288" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_pb2_grpc.py</text>
+<text x="20" y="310" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order_pb2.py</text>
+<text x="20" y="332" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order_pb2_grpc.py</text>
+<text x="20" y="354" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/inventory_server.py       # gRPC inventory server (:50051)</text>
+<text x="20" y="376" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order_server.py           # persistent gRPC order service (:50052)</text>
+<text x="20" y="398" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/order_client.py           # direct inventory client (2.0s deadline)</text>
+<text x="20" y="420" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./grpc/place_order.py            # order client via the order service</text>
+<text x="20" y="442" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./logs/                          # server logs + demo transcripts</text>
+<text x="20" y="464" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#d4d4d4">./screenshots/                   # terminal screenshots of each step</text>
 </svg>

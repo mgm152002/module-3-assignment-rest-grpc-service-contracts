@@ -1,0 +1,19 @@
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":-2}'
+{"error":"request must be JSON with item_id (str) and quantity (positive int)"}
+
+HTTP 400
+
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":0}'
+{"error":"request must be JSON with item_id (str) and quantity (positive int)"}
+
+HTTP 400
+
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":"two"}'
+{"error":"request must be JSON with item_id (str) and quantity (positive int)"}
+
+HTTP 400
+
+$ curl -X POST localhost:5000/order -H "Content-Type: application/json" -d '{"item_id":"widget","quantity":2}'
+{"item_id":"widget","quantity":2,"status":"confirmed"}
+
+HTTP 201

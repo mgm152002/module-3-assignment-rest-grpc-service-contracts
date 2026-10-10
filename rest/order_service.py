@@ -4,6 +4,7 @@ Flask app on port 5000.
 POST /order {"item_id": ..., "quantity": ...}
 Calls the Inventory Service at http://localhost:5001 with a 2s timeout and
 maps the result:
+  bad body / quantity not a positive int -> 400 {"error": ...}
   inventory 200 + available=true   -> 201 {"status": "confirmed", ...}
   inventory 404                     -> 404 {"error": "item not found"}
   inventory 200 + available=false   -> 409 {"status": "rejected", "reason": "insufficient stock"}
@@ -28,9 +29,11 @@ def create_order():
         data = request.get_json(force=True, silent=True) or {}
         item_id = data.get("item_id")
         quantity = data.get("quantity")
-        if not item_id or not isinstance(quantity, int):
+        if (not item_id or not isinstance(item_id, str)
+                or not isinstance(quantity, int) or isinstance(quantity, bool)
+                or quantity <= 0):
             print(f"[{datetime.now()}] POST /order -> 400 (bad request body: {data})", flush=True)
-            return jsonify({"error": "request must be JSON with item_id (str) and quantity (int)"}), 400
+            return jsonify({"error": "request must be JSON with item_id (str) and quantity (positive int)"}), 400
 
         try:
             resp = requests.get(f"{INVENTORY_URL}/{item_id}",

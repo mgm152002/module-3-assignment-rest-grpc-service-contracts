@@ -1,0 +1,34 @@
+$ # terminal 1: inventory slowed to 5s
+$ INVENTORY_DELAY=5 python3 grpc/inventory_server.py
+[2026-10-09 19:54:27.075112] Inventory Service (gRPC) listening on 127.0.0.1:50051 and unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock, INVENTORY_DELAY=5
+
+$ # terminal 2: persistent order service (PID 3796), inventory via unix socket
+$ GRPC_TARGET=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock python3 grpc/order_server.py
+[2026-10-09 19:54:28.295369] Order Service (gRPC) listening on 127.0.0.1:50052 and unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock, inventory=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/inventory.sock, deadline=2.0s
+
+$ # terminal 3: place an order through the order service (inventory is slow)
+$ ORDER_TARGET=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock python3 grpc/place_order.py widget 2
+Target: unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock
+Request: item_id='widget' quantity=2 (deadline=2.0s)
+DEADLINE_EXCEEDED: order service did not respond within 2.0s (details: Deadline Exceeded)
+# ^ the order service mapped the slow inventory onto DEADLINE_EXCEEDED and stayed up
+
+$ # restart inventory with no delay; the SAME order server (PID 3796) is still running
+$ python3 grpc/inventory_server.py
+[2026-10-09 19:54:44.xxxxxx] Inventory Service (gRPC) listening on 127.0.0.1:50051 and unix:.../inventory.sock, INVENTORY_DELAY=0
+
+$ ORDER_TARGET=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock python3 grpc/place_order.py widget 2
+Target: unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock
+Request: item_id='widget' quantity=2 (deadline=2.0s)
+OK: status='confirmed' item_id='widget' quantity=2
+# ^ served by the same order-service process that survived the deadline failure
+
+$ # order-service log shows both outcomes from the one process:
+[2026-10-09 19:54:37.330255] PlaceOrder(item=widget, qty=2) -> DEADLINE_EXCEEDED (inventory too slow)
+[2026-10-09 19:54:47.116046] PlaceOrder(item=widget, qty=2) -> OK (confirmed)
+
+$ # invalid quantity is rejected without touching inventory:
+$ ORDER_TARGET=unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock python3 grpc/place_order.py widget -3
+Target: unix:/home/hatch/workspace/cmpe273-week1-lab1-starter/grpc/order.sock
+Request: item_id='widget' quantity=-3 (deadline=2.0s)
+INVALID_ARGUMENT: quantity must be a positive integer

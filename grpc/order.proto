@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package orders;
+
+// Order service contract: place an order. The order service itself calls
+// the inventory service (inventory.proto) with a 2.0s deadline and maps the
+// outcome onto gRPC statuses, mirroring the REST order service:
+//
+//   bad quantity (<= 0)               -> INVALID_ARGUMENT
+//   inventory NOT_FOUND               -> NOT_FOUND
+//   inventory FAILED_PRECONDITION     -> FAILED_PRECONDITION
+//   inventory too slow (2.0s deadline)-> DEADLINE_EXCEEDED
+//   otherwise                         -> PlaceOrderResponse(status="confirmed")
+service OrderService {
+  rpc PlaceOrder(PlaceOrderRequest) returns (PlaceOrderResponse);
+}
+
+message PlaceOrderRequest {
+  string item_id = 1;
+  int32 quantity = 2;
+}
+
+message PlaceOrderResponse {
+  string status = 1;    // "confirmed"
+  string item_id = 2;
+  int32 quantity = 3;
+}
